@@ -87,8 +87,8 @@ FreeLancers-Website/
 ### 1️⃣ Clone Repository
 
 ```
-git clone https://github.com/Ahamedin/UnitoidsAPP.git
-cd UnitoidsAPP
+git clone https://github.com/Ahamedin/Unitoids.git
+cd Unitoids
 ```
 
 ---
