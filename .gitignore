@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+venv/
+csp/venv/
+
+# AI / Vector DB
+*.faiss
+*.pkl
+csp/vectorstore/
+csp/data/faiss_*
+
+# Environment variables
+.env
+
+# Node
+node_modules/
+dist/
+build/
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
