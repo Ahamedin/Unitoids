@@ -15,16 +15,14 @@ function FreelancerDashboard() {
   useEffect(() => {
     const fetchFreelancer = async () => {
       if (!user) return;
-
       try {
         const email = user.emailAddresses[0].emailAddress;
-        const res = await fetch(
-          `http://localhost:5000/api/freelancers/by-email/${email}`
-        );
+        const res = await fetch(`http://localhost:5000/api/freelancers/by-email/${email}`);
+        if (!res.ok) throw new Error("Failed to fetch freelancer");
         const data = await res.json();
         setFreelancer(data);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching freelancer:", err);
       } finally {
         setLoading(false);
       }
@@ -49,18 +47,33 @@ function FreelancerDashboard() {
   }, [freelancer]);
 
   // ================= ACTION =================
-  const handleBookingAction = async (bookingId, action) => {
-    await fetch(
+const handleBookingAction = async (bookingId, action) => {
+  try {
+    const res = await fetch(
       `http://localhost:5000/api/bookings/${bookingId}/${action}`,
       { method: "PUT" }
     );
+    const updated = await res.json();
+    if (!res.ok) throw new Error(updated.message || "Action failed");
 
+    // ✅ Update booking list locally
     setBookings((prev) =>
-      prev.map((b) =>
-        b._id === bookingId ? { ...b, status: action + "ed" } : b
-      )
+      prev.map((b) => (b._id === bookingId ? updated : b))
     );
-  };
+
+    // ✅ Refresh freelancer data (for completed projects)
+    if (freelancer?._id) {
+      const refreshRes = await fetch(
+        `http://localhost:5000/api/freelancers/${freelancer._id}`
+      );
+      const freshData = await refreshRes.json();
+      setFreelancer(freshData);
+    }
+  } catch (err) {
+    console.error("Error updating booking:", err);
+  }
+};
+
 
   if (loading)
     return (

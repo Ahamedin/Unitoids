@@ -4,9 +4,6 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import freelancerRoutes from "./routes/freelancerRoutes.js";
 import bookingRoutes from "./routes/bookingroutes.js";
-import CategoryRoutes from "./routes/categoryRoutes.js";
-import chatRoutes from "./routes/chatRoutes.js";
-
 
 
 // Load environment variables
@@ -28,9 +25,6 @@ app.get("/", (req, res) => res.send("Freelancer API is running ✅"));
 // API routes
 app.use("/api/freelancers", freelancerRoutes);
 app.use("/api/bookings", bookingRoutes);
-app.use("/api/categories", CategoryRoutes); // 👈 Add this line
-app.use("/api/chat", chatRoutes);
-
 
 // Start server
 const PORT = process.env.PORT || 5000;
