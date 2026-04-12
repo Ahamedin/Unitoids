@@ -1,11 +1,44 @@
 import React from "react";
-
+import { useRef } from "react";
+import emailjs from "@emailjs/browser";
 // shadcn
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
 
 function Contact() {
+  const { toast } = useToast();
+  const formRef = useRef();
+
+const sendEmail = (e) => {
+  e.preventDefault();
+
+  emailjs.sendForm(
+  "service_527p695",
+  "YOUR_TEMPLATE_ID",
+  formRef.current,
+  "YOUR_PUBLIC_KEY"
+)
+.then(
+  () => {
+    toast({
+  title: "✅ Message Sent",
+  description: "We’ll get back to you soon!",
+});
+
+    formRef.current.reset();
+  },
+  (error) => {
+    toast({
+      title: "❌ Failed",
+      description: "Something went wrong. Try again.",
+      variant: "destructive",
+    });
+  }
+);
+};
   return (
     <div className="min-h-screen relative overflow-hidden text-foreground">
 
@@ -40,45 +73,36 @@ function Contact() {
                 Send us a Message
               </h3>
 
-              <form className="space-y-4">
+<form ref={formRef} onSubmit={sendEmail} className="space-y-4">
 
-                <div>
-                  <label className="text-sm text-gray-400">
-                    Full Name
-                  </label>
-                  <Input
-                    placeholder="Enter your name"
-                    className="bg-white/5 border-white/10 text-white"
-                  />
-                </div>
+  <Input
+    name="user_name"
+    placeholder="Enter your name"
+    className="bg-white/5 border-white/10 text-white"
+    required
+  />
 
-                <div>
-                  <label className="text-sm text-gray-400">
-                    Email
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="bg-white/5 border-white/10 text-white"
-                  />
-                </div>
+  <Input
+    type="email"
+    name="user_email"
+    placeholder="Enter your email"
+    className="bg-white/5 border-white/10 text-white"
+    required
+  />
 
-                <div>
-                  <label className="text-sm text-gray-400">
-                    Message
-                  </label>
-                  <textarea
-                    rows="5"
-                    placeholder="Type your message..."
-                    className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30"
-                  />
-                </div>
+  <textarea
+    name="message"
+    rows="5"
+    placeholder="Type your message..."
+    className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+    required
+  />
 
-                <Button className="w-full mt-2">
-                  Send Message
-                </Button>
+  <Button type="submit" className="w-full text-white">
+    Send Message
+  </Button>
 
-              </form>
+</form>
             </CardContent>
           </Card>
 
@@ -94,27 +118,36 @@ function Contact() {
             </p>
 
             <div className="space-y-3 text-sm text-gray-300">
-              <p>📍 Chennai, India</p>
-              <p>📧 support@unitoids.com</p>
-              <p>📞 +91 98765 43210</p>
+              <p>Location: Karaikudi, Tamil Nadu</p>
+              <p>GMail: iklashriz@gmail.com</p>
+              <p>Mobile: +91 86103 38487</p>
             </div>
 
             {/* 🔥 SOCIAL */}
             <div>
               <h4 className="font-semibold mb-2 text-white">
-                Follow us
+                Follow Me
               </h4>
 
               <div className="flex gap-4 text-sm text-gray-400">
+                <Link to="/https://leetcode.com/u/IklashAhamed/">
                 <span className="hover:text-white cursor-pointer transition">
-                  Facebook
+                  LeetCode
                 </span>
+                </Link>
+
+                <Link to="https://www.linkedin.com/in/iklash/">
                 <span className="hover:text-white cursor-pointer transition">
-                  Twitter
+                  Linkedin
                 </span>
+                </Link>
+
+                <Link to="https://github.com/Ahamedin">
                 <span className="hover:text-white cursor-pointer transition">
-                  Instagram
+                  Github
                 </span>
+                </Link>
+                
               </div>
             </div>
 

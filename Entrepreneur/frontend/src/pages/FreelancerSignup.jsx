@@ -10,12 +10,16 @@ function FreelancerSignup() {
   const [category, setCategory] = useState("");
 
   // ================= CATEGORY =================
-  const handleCategorySelect = (cat) => {
-    setCategory(cat);
+const handleCategorySelect = (cat) => {
+  setCategory(cat);
 
-    // 👉 send category to next page if needed
-    navigate("/profile-setup", { state: { category: cat } });
-  };
+  localStorage.setItem("role", "freelancer");
+
+  // 🔥 ADD THIS (IMPORTANT)
+  window.dispatchEvent(new Event("roleChanged"));
+
+  navigate("/profile-setup", { state: { category: cat } });
+};
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4">

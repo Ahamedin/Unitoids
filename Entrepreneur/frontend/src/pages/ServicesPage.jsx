@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+// shadcn
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 export default function NonTechnicalServices() {
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,13 +13,10 @@ export default function NonTechnicalServices() {
   const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
 
-  // Fetch freelancers from backend by city & pincode
   const fetchFreelancers = async (userCity, userPincode) => {
     try {
       setLoading(true);
-      let url = `http://localhost:5000/api/freelancers/location?city=${encodeURIComponent(
-        userCity
-      )}`;
+      let url = `http://localhost:5000/api/freelancers/location?city=${encodeURIComponent(userCity)}`;
       if (userPincode) url += `&pincode=${encodeURIComponent(userPincode)}`;
 
       const res = await fetch(url);
@@ -22,14 +24,13 @@ export default function NonTechnicalServices() {
       setFreelancers(data);
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching freelancers:", err);
+      console.error(err);
       setLoading(false);
     }
   };
 
-  // Convert lat/lng to city & pincode using Google Maps API
   const fetchCityAndPincode = async (lat, lng) => {
-    const API_KEY = "YOUR_GOOGLE_API_KEY"; // Replace with your Google API key
+    const API_KEY = "YOUR_GOOGLE_API_KEY";
     try {
       const res = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?lat=${lat}&lng=${lng}&key=${API_KEY}`
@@ -37,53 +38,46 @@ export default function NonTechnicalServices() {
       const data = await res.json();
 
       if (data.results.length > 0) {
-        const addressComponents = data.results[0].address_components;
-        const cityComp = addressComponents.find((c) =>
-          c.types.includes("locality")
-        );
-        const pincodeComp = addressComponents.find((c) =>
-          c.types.includes("postal_code")
-        );
+        const comps = data.results[0].address_components;
+        const cityComp = comps.find(c => c.types.includes("locality"));
+        const pinComp = comps.find(c => c.types.includes("postal_code"));
 
         return {
-          city: cityComp ? cityComp.long_name : "",
-          pincode: pincodeComp ? pincodeComp.long_name : "",
+          city: cityComp?.long_name || "",
+          pincode: pinComp?.long_name || "",
         };
       }
     } catch (err) {
-      console.error("Error fetching city/pincode:", err);
+      console.error(err);
     }
-
     return { city: "", pincode: "" };
   };
 
-  // Detect location on page load
   useEffect(() => {
     const detectLocation = async () => {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            const location = await fetchCityAndPincode(lat, lng);
+          async (pos) => {
+            const loc = await fetchCityAndPincode(
+              pos.coords.latitude,
+              pos.coords.longitude
+            );
 
-            if (location.city) {
-              setCity(location.city);
-              setPincode(location.pincode || "");
-              fetchFreelancers(location.city, location.pincode);
+            if (loc.city) {
+              setCity(loc.city);
+              setPincode(loc.pincode);
+              fetchFreelancers(loc.city, loc.pincode);
             } else {
               setLocationDenied(true);
               setLoading(false);
             }
           },
-          (err) => {
-            console.warn("Location denied:", err.message);
+          () => {
             setLocationDenied(true);
             setLoading(false);
           }
         );
       } else {
-        console.warn("Geolocation not supported");
         setLocationDenied(true);
         setLoading(false);
       }
@@ -92,64 +86,97 @@ export default function NonTechnicalServices() {
     detectLocation();
   }, []);
 
-  // Manual search fallback
   const handleSearch = () => {
     if (city) fetchFreelancers(city, pincode);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-6">
-      <h2 className="text-center text-indigo-600 text-2xl font-extrabold mb-2">
-        Your Task, Their Talent
-      </h2>
-      <h1 className="text-3xl font-bold text-center mb-8">
-        Find Nearby Freelancers
-      </h1>
+    <div className="min-h-screen relative overflow-hidden text-foreground">
 
+      {/* 🔥 GRID */}
+      <div className="grid-background"></div>
+
+      {/* 🔥 DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/90 -z-10"></div>
+
+      {/* ================= HERO ================= */}
+      <section className="relative z-10 text-center py-20 px-6">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-white">
+          Find{" "}
+          <span className="bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent">
+            Freelancers
+          </span>
+        </h1>
+
+        <p className="mt-6 text-gray-400 max-w-xl mx-auto">
+          Discover skilled professionals near you for any task.
+        </p>
+      </section>
+
+      {/* ================= SEARCH ================= */}
       {locationDenied && (
-        <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6 mb-8">
-          <label className="block mb-2 font-semibold">City</label>
-          <input
-            type="text"
-            placeholder="Enter City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="input input-bordered w-full mb-4"
-          />
-          <label className="block mb-2 font-semibold">Pincode (Optional)</label>
-          <input
-            type="text"
-            placeholder="Enter Pincode"
-            value={pincode}
-            onChange={(e) => setPincode(e.target.value)}
-            className="input input-bordered w-full mb-4"
-          />
-          <button onClick={handleSearch} className="btn btn-primary w-full">
-            Find Freelancers
-          </button>
+        <div className="relative z-10 max-w-xl mx-auto px-6 mb-10">
+          <Card className="bg-white/5 border border-white/10 backdrop-blur">
+            <CardContent className="pt-6 space-y-4">
+              <Input
+                placeholder="Enter City"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="bg-white/5 border-white/10 text-white"
+              />
+              <Input
+                placeholder="Pincode (Optional)"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+                className="bg-white/5 border-white/10 text-white"
+              />
+              <Button onClick={handleSearch} className="w-full text-white">
+                Find Freelancers
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       )}
 
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      {/* ================= CARDS ================= */}
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-6 pb-16">
+
         {loading ? (
-          <p className="text-center text-gray-500">Loading freelancers...</p>
+          <p className="text-center text-gray-400 col-span-3">
+            Loading freelancers...
+          </p>
         ) : freelancers.length > 0 ? (
           freelancers.map((f) => (
-            <Link
-              key={f._id}
-              to={`/freelancer/${f._id}`}
-              className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition block"
-            >
-              <h2 className="text-xl font-semibold">{f.name}</h2>
-              <p className="text-gray-600">{f.category}</p>
-              <p className="text-gray-500">
-                {f.city} - {f.pincode || "N/A"}
-              </p>
-              <p className="text-lg font-bold mt-2">₹{f.price}</p>
+            <Link key={f._id} to={`/freelancer/${f._id}`}>
+              <Card className="bg-white/5 border border-white/10 backdrop-blur hover:border-white/30 transition hover:-translate-y-1">
+                <CardContent className="p-6">
+
+                  <h2 className="text-xl font-semibold text-white">
+                    {f.name}
+                  </h2>
+
+                  <p className="text-gray-400 text-sm mt-1">
+                    {f.category}
+                  </p>
+
+                  {/* ❌ LOCATION REMOVED */}
+
+                  {f.rating && (
+                    <p className="text-yellow-400 text-sm mt-2">
+                      ⭐ {f.rating}
+                    </p>
+                  )}
+
+                  <p className="text-lg font-bold mt-3 text-white">
+                    ₹{f.price}
+                  </p>
+
+                </CardContent>
+              </Card>
             </Link>
           ))
         ) : (
-          <p className="text-center text-gray-500">
+          <p className="text-center text-gray-400 col-span-3">
             No freelancers found nearby.
           </p>
         )}

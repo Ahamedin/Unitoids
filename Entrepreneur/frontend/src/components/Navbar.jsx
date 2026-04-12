@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { UserButton, useUser } from "@clerk/clerk-react";
@@ -9,7 +9,27 @@ function Navbar() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { isSignedIn } = useUser();
+  const [role, setRole] = useState("");
 
+useEffect(() => {
+  const updateRole = () => {
+    const userRole = localStorage.getItem("role");
+    setRole(userRole || "");
+  };
+
+  if (!isSignedIn) {
+    setRole("");
+    localStorage.removeItem("role");
+  } else {
+    updateRole();
+  }
+
+  window.addEventListener("roleChanged", updateRole);
+
+  return () => {
+    window.removeEventListener("roleChanged", updateRole);
+  };
+}, [isSignedIn]);
   return (
     <header className="sticky top-0 z-50 bg-black border-b border-gray-800">
       
@@ -44,6 +64,13 @@ function Navbar() {
           <Link className="hover:text-white transition" to="/pp">
             Privacy
           </Link>
+          {isSignedIn && role === "freelancer" && (
+  <Link to="/freelancer-dashboard">
+    <Button className="bg-white text-black hover:bg-gray-200">
+      Dashboard
+    </Button>
+  </Link>
+)}
 
           {/* AUTH */}
           {!isSignedIn ? (
@@ -53,7 +80,13 @@ function Navbar() {
               </Button>
             </Link>
           ) : (
-            <UserButton afterSignOutUrl="/" />
+            <UserButton
+              afterSignOutUrl="/"
+              onSignOut={() => {
+                localStorage.removeItem("role");
+                setRole(""); // 🔥 FORCE UI UPDATE
+              }}
+            />
           )}
         </nav>
 
@@ -88,6 +121,15 @@ function Navbar() {
             Privacy
           </Link>
 
+          {isSignedIn && role === "freelancer" && (
+  <Link to="/freelancer-dashboard">
+    <Button className="bg-white text-black hover:bg-gray-200">
+      Dashboard
+    </Button>
+  </Link>
+)}
+
+
           {!isSignedIn ? (
             <Link to="/login" onClick={() => setIsOpen(false)}>
               <Button className="w-full bg-white text-black">
@@ -95,7 +137,13 @@ function Navbar() {
               </Button>
             </Link>
           ) : (
-            <UserButton afterSignOutUrl="/" />
+            <UserButton
+              afterSignOutUrl="/"
+              onSignOut={() => {
+                localStorage.removeItem("role");
+                setRole(""); // 🔥 FORCE UI UPDATE
+              }}
+            />
           )}
         </div>
       )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
+import freelancersData from "../datas/freelancers.json";
 
 // shadcn
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,23 +17,37 @@ export default function FreelancerDetails() {
   const [error, setError] = useState("");
 
   // ================= FETCH =================
-  useEffect(() => {
-    const fetchFreelancer = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:5000/api/freelancers/${id}`
-        );
-        const data = await res.json();
-        setFreelancer(data);
-      } catch (err) {
-        setError("Failed to load freelancer");
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchFreelancer = async () => {
+    try {
+      // ✅ Try MongoDB first
+      const res = await fetch(
+        `http://localhost:5000/api/freelancers/${id}`
+      );
+      const data = await res.json();
 
-    fetchFreelancer();
-  }, [id]);
+      if (data && data._id) {
+        setFreelancer(data);
+      } else {
+        throw new Error("Not in DB");
+      }
+
+    } catch (err) {
+      // ✅ Fallback to JSON
+      const found = freelancersData.find((f) => f.id === id);
+
+      if (found) {
+        setFreelancer(found);
+      } else {
+        setError("Freelancer not found");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchFreelancer();
+}, [id]);
 
   // ================= BOOK =================
   const handleBooking = async (e) => {
@@ -119,12 +134,13 @@ export default function FreelancerDetails() {
               </p>
 
               <p className="text-lg font-semibold text-white">
-                ₹{freelancer.price}
+                ₹{freelancer.pricing?.amount || freelancer.price}
               </p>
 
               <p className="text-sm text-gray-400">
-                {freelancer.city} • {freelancer.pincode}
-              </p>
+  {freelancer.location?.city || freelancer.city} •{" "}
+  {freelancer.location?.pincode || freelancer.pincode}
+</p>
 
               {/* 🔥 EXTRA UI */}
               <div className="flex gap-4 mt-4 text-sm text-gray-400">
@@ -180,7 +196,7 @@ export default function FreelancerDetails() {
                     Advance Fee: <span className="font-semibold">₹49</span>
                   </div>
 
-                  <Button className="w-full">
+                  <Button className="w-full text-white">
                     Continue & Pay
                   </Button>
 

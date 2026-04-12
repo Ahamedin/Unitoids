@@ -6,10 +6,23 @@ import { Button } from "@/components/ui/button";
 import banner4 from "../assets/banner4.jpeg";
 import blueCollar from "../assets/blueCollar.jpeg";
 import whiteCollar from "../assets/whiteCollar.jpeg";
+import { useState, useEffect } from "react";
 
 function HomePage() {
   const { isSignedIn } = useUser();
+  const [role, setRole] = useState("");
 
+useEffect(() => {
+  if (!isSignedIn) {
+    // 🔥 logout → reset role
+    setRole("");
+    localStorage.removeItem("role");
+  } else {
+    // 🔥 login → load role
+    const userRole = localStorage.getItem("role");
+    setRole(userRole || "");
+  }
+}, [isSignedIn]);
   const sendMessage = async (message) => {
     try {
       const res = await fetch("http://localhost:5000/api/chat", {
@@ -211,19 +224,43 @@ function HomePage() {
           Join thousands of freelancers and clients already growing with Unitoids.
         </p>
 
-        <div className="mt-8 flex justify-center gap-4">
+        <div className="mt-8 flex justify-center items-center w-full">
+  
+        {role === "freelancer" ? (
+          // ✅ ONLY ONE BUTTON → PERFECT CENTER
           <Link to="/services">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+            <Button
+              size="lg"
+              className="bg-white text-black hover:bg-gray-200"
+            >
               Get Started
             </Button>
           </Link>
+        ) : (
+          // ✅ TWO BUTTONS → CENTER WITH GAP
+          <div className="flex gap-4">
+            <Link to="/services">
+              <Button
+                size="lg"
+                className="bg-white text-black hover:bg-gray-200"
+              >
+                Get Started
+              </Button>
+            </Link>
 
-          <Link to="/freelancer-signup">
-            <Button variant="outline" size="lg" className="border-white text-white">
-              Become Freelancer
-            </Button>
-          </Link>
-        </div>
+            <Link to="/freelancer-signup">
+              <Button
+  variant="outline"
+  size="lg"
+  className="border-white text-white hover:bg-white/70"
+>
+  Become Freelancer
+</Button>
+            </Link>
+          </div>
+        )}
+
+      </div>
 
       </section>
       <ChatBot sendMessage={sendMessage} />

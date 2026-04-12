@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { Toaster } from "@/components/ui/toaster";
 // Pages
 import HomePage from "./pages/HomePage.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
@@ -38,13 +38,14 @@ function App() {
         isLoggedIn={isLoggedIn}
         onLoginToggle={() => setIsLoggedIn(!isLoggedIn)}
       />
-
+      <Toaster />
       {/* All Routes */}
       <Routes>
         {/* Public Pages */}
         <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/services" element={<ServicesPage />} />
+        
         <Route path="/contact" element={<Contact />} />
         <Route path="/pp" element={<PrivacyPolicy />} />
         <Route path="/categories" element={<CategoryPage />} />
