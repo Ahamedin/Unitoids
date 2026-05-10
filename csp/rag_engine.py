@@ -10,13 +10,11 @@ load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-# Global variables
 llm = None
 embeddings = None
 db = None
 retriever = None
 
-# Prompt template
 prompt = PromptTemplate(
     input_variables=["context", "question"],
     template="""
@@ -38,9 +36,7 @@ def initialize():
 
     global llm, embeddings, db, retriever
 
-    # Load only once
     if llm is None:
-
         llm = ChatGoogleGenerativeAI(
             model="gemini-1.5-flash",
             temperature=0.3,
@@ -48,13 +44,11 @@ def initialize():
         )
 
     if embeddings is None:
-
         embeddings = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
 
     if db is None:
-
         db = FAISS.load_local(
             "vectorstore",
             embeddings,
@@ -62,7 +56,6 @@ def initialize():
         )
 
         retriever = db.as_retriever(search_kwargs={"k": 4})
-
 
 def ask_question(query):
 
