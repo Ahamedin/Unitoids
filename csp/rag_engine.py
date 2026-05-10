@@ -24,11 +24,20 @@ embeddings = HuggingFaceEmbeddings(
 )
 
 # Load FAISS vector store
-db = FAISS.load_local(
-    "vectorstore",
-    embeddings,
-    allow_dangerous_deserialization=True
-)
+db = None
+retriever = None
+
+def load_vectorstore():
+    global db, retriever
+
+    if db is None:
+        db = FAISS.load_local(
+            "vectorstore",
+            embeddings,
+            allow_dangerous_deserialization=True
+        )
+
+        retriever = db.as_retriever(search_kwargs={"k": 4})
 
 retriever = db.as_retriever(search_kwargs={"k": 4})
 
@@ -51,6 +60,8 @@ Answer clearly:
 )
 
 def ask_question(query):
+
+    load_vectorstore()
 
     docs = retriever.get_relevant_documents(query)
 
