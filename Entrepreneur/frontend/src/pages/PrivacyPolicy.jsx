@@ -112,7 +112,8 @@ function PrivacyPolicy() {
 
       {/* ================= FOOTER ================= */}
       <footer className="text-center py-8 text-gray-500 text-sm relative z-10 border-t border-white/10">
-        © 2026 Unitoids. All rights reserved.
+        <p>© 2026 Unitoids. All rights reserved.</p>
+        <p className="mt-2 text-sm text-white">Made by Iklash Ahamed ❤️</p>
       </footer>
     </div>
   );

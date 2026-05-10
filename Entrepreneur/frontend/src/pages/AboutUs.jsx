@@ -155,7 +155,8 @@ function AboutUs() {
 
       {/* ================= FOOTER ================= */}
       <footer className="relative z-10 text-center py-6 text-gray-500">
-        © 2026 Unitoids. All rights reserved.
+        <p>© 2026 Unitoids. All rights reserved.</p>
+        <p className="mt-2 text-sm text-white">Made by Iklash Ahamed ❤️</p>
       </footer>
     </div>
   );
