@@ -275,8 +275,14 @@ useEffect(() => {
         )}
 
       </div>
-
       </section>
+      
+      {/* ================= FOOTER ================= */}
+      <footer className="relative z-10 text-center py-6 text-gray-500 bg-gradient-to-b from-black/100 to-black/100">
+        <p>© 2026 Unitoids. All rights reserved.</p>
+        <p className="mt-2 text-sm text-white">Made by Iklash Ahamed ❤️</p>
+      </footer>
+
       <ChatBot sendMessage={sendMessage} />
     </div>
   );
