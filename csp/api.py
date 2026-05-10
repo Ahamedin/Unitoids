@@ -11,7 +11,6 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
-from linkedin_api import Linkedin
 
 # ===============================
 # Load ENV
@@ -20,7 +19,7 @@ from linkedin_api import Linkedin
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
-API_KEY = os.getenv("PYTHON_API_KEY", "Vishnu@2004")
+API_KEY = os.getenv("PYTHON_API_KEY", "Unitoids@2026")
 
 print("GEMINI KEY:", GEMINI_API_KEY)
 # ===============================
@@ -87,16 +86,34 @@ def create_documents(freelancers):
     for f in freelancers:
 
         projects_info = "\n".join([
-            f"Title: {p['projectTitle']}, Rating: {p.get('rating', 0)}"
+            f"Title: {p.get('projectTitle', 'N/A')}, Rating: {p.get('rating', 0)}"
             for p in f.get("projects", [])
         ])
+
+        skills = ", ".join(f.get("skills", [])) if f.get("skills") else "N/A"
+        city = f.get("city") or f.get("location", {}).get("city", "N/A")
+        pincode = f.get("location", {}).get("pincode", "N/A")
+        subcategory = f.get("subcategory", "N/A")
+        experience = f.get("experience", "N/A")
+
+        pricing = f.get("pricing", {})
+        price_amount = f.get("price", pricing.get("amount", "N/A"))
+        price_type = pricing.get("type", "N/A")
+        price_desc = pricing.get("description", "N/A")
 
         text = f"""
 Name: {f['name']}
 Category: {f['category']}
-City: {f.get('city', 'N/A')}
-Price: {f['price']}
-Average Rating: {f.get('averageRating', 0)}
+Subcategory: {subcategory}
+Skills: {skills}
+Experience: {experience}
+City: {city}
+Pincode: {pincode}
+Price: {price_amount}
+Price Type: {price_type}
+Pricing Description: {price_desc}
+Average Rating: {f.get('averageRating', f.get('rating', 0))}
+Completed Jobs: {f.get('completedJobs', 0)}
 Number of Projects: {len(f.get('projects', []))}
 
 Projects:
@@ -148,7 +165,17 @@ def classify_intent(query):
         "tutor",
         "engineer",
         "freelancer",
-        "development"
+        "development",
+        "marketing",
+        "digital marketing",
+        "seo",
+        "interior",
+        "photographer",
+        "video editing",
+        "data analysis",
+        "legal",
+        "finance",
+        "financial consulting"
     ]
 
     support_keywords = [
@@ -199,8 +226,22 @@ print("🔧 Loading FAISS vector stores...")
 FAISS_FREELANCERS_PATH = "data/faiss_freelancers_index"
 FAISS_SUPPORT_PATH = "data/faiss_support_index"
 
+
+def should_rebuild_freelancer_index():
+    # Rebuild if index is missing or source JSON changed after index creation.
+    index_file = os.path.join(FAISS_FREELANCERS_PATH, "index.faiss")
+    source_file = "data/freelancers.json"
+
+    if not os.path.exists(index_file):
+        return True
+
+    if not os.path.exists(source_file):
+        return False
+
+    return os.path.getmtime(source_file) > os.path.getmtime(index_file)
+
 # Freelancer DB
-if os.path.exists(FAISS_FREELANCERS_PATH):
+if os.path.exists(FAISS_FREELANCERS_PATH) and not should_rebuild_freelancer_index():
 
     freelancer_db = FAISS.load_local(
         FAISS_FREELANCERS_PATH,
@@ -209,6 +250,9 @@ if os.path.exists(FAISS_FREELANCERS_PATH):
     )
 
 else:
+
+    if os.path.exists(FAISS_FREELANCERS_PATH):
+        print("♻ Rebuilding freelancer FAISS index from updated freelancers.json")
 
     freelancer_docs = create_documents(freelancers_data)
 
@@ -399,44 +443,3 @@ Assistant:
     )
 
     return response
-
-
-##linkedin integration (for future use)
-@app.get("/linkedin/{city}")
-def linkedin(city: str):
-
-    try:
-        api = Linkedin("ahmedsbro1234@gmail.com", "botlinkedinid")
-
-        results = api.search_people(keywords=city)
-
-        freelancers = []
-
-        for r in results[:5]:
-            freelancers.append({
-                "name": r.get("name"),
-                "category": r.get("headline"),
-                "city": r.get("location"),
-                "profile": f"https://linkedin.com/in/{r.get('public_id')}"
-            })
-
-        return freelancers
-
-    except Exception as e:
-        print("LinkedIn ERROR:", e)
-
-        # ✅ fallback data (IMPORTANT)
-        return [
-            {
-                "name": "Rahul Sharma",
-                "category": "Web Developer",
-                "city": city,
-                "profile": "#"
-            },
-            {
-                "name": "Ankit Verma",
-                "category": "App Developer",
-                "city": city,
-                "profile": "#"
-            }
-        ]

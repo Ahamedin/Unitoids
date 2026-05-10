@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import hiBot from "../assets/man-waiving-hand.json";
+import freelancersData from "../datas/freelancers.json";
+
 // shadcn
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 
 const ChatBot = ({ sendMessage }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,11 +24,30 @@ const ChatBot = ({ sendMessage }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // ================= PARSER =================
+  const parseFreelancers = (text) => {
+    const results = [];
+
+    freelancersData.forEach((freelancer) => {
+      if (
+        text.toLowerCase().includes(freelancer.name.toLowerCase())
+      ) {
+        results.push(freelancer);
+      }
+    });
+
+    return results;
+  };
+
   // ================= SEND =================
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { sender: "user", type: "text", text: input };
+    const userMessage = {
+      sender: "user",
+      type: "text",
+      text: input,
+    };
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
@@ -36,35 +56,45 @@ const ChatBot = ({ sendMessage }) => {
     try {
       const botResponse = await sendMessage(input);
 
+      const responseText =
+        botResponse.general_answer ||
+        botResponse.support_answer ||
+        botResponse.freelancer_answer ||
+        botResponse.reply ||
+        "";
+
       const newMessages = [];
 
-      if (botResponse.freelancer_answer) {
-        const parsed = parseFreelancers(botResponse.freelancer_answer);
+      // ✅ Detect freelancer response
+      if (
+        responseText.toLowerCase().includes("name:") ||
+        responseText.includes("**Name**")
+      ) {
+        const parsed = parseFreelancers(responseText);
 
-        newMessages.push({
-          sender: "bot",
-          type: "freelancers",
-          freelancers: parsed,
-        });
-      }
-
-      if (botResponse.support_answer) {
+        if (parsed.length > 0) {
+          newMessages.push({
+            sender: "bot",
+            type: "freelancers",
+            freelancers: parsed,
+          });
+        } else {
+          newMessages.push({
+            sender: "bot",
+            type: "text",
+            text: responseText,
+          });
+        }
+      } else {
         newMessages.push({
           sender: "bot",
           type: "text",
-          text: botResponse.support_answer,
-        });
-      }
-
-      if (botResponse.general_answer) {
-        newMessages.push({
-          sender: "bot",
-          type: "text",
-          text: botResponse.general_answer,
+          text: responseText,
         });
       }
 
       setMessages((prev) => [...prev, ...newMessages]);
+
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -79,38 +109,23 @@ const ChatBot = ({ sendMessage }) => {
     }
   };
 
-  // ================= PARSER =================
-  const parseFreelancers = (text) => {
-    const blocks = text.split("\n\n");
-
-    return blocks.map((b, i) => {
-      const name = b.match(/Name:\s*(.*)/)?.[1] || "Unknown";
-      const category = b.match(/Category:\s*(.*)/)?.[1] || "";
-      const city = b.match(/City:\s*(.*)/)?.[1] || "";
-      const rating = b.match(/Rating:\s*(.*)/)?.[1] || "";
-
-      return {
-        _id: i,
-        name,
-        category,
-        city,
-        rating,
-      };
-    });
-  };
-
   // ================= RESIZE =================
   const handleMouseMove = (e) => {
     if (isResizingSidebar) {
       const newWidth = window.innerWidth - e.clientX;
-      if (newWidth >= 320 && newWidth <= 600) setWidth(newWidth);
+
+      if (newWidth >= 320 && newWidth <= 600) {
+        setWidth(newWidth);
+      }
     }
   };
 
   useEffect(() => {
     const stop = () => setIsResizingSidebar(false);
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", stop);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", stop);
@@ -125,16 +140,13 @@ const ChatBot = ({ sendMessage }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 z-50 flex items-center justify-center cursor-pointer transition-all duration-300"
         style={{
-          right: isOpen ? width + 24 : 24, // 🔥 THIS IS THE MAGIC
+          right: isOpen ? width + 24 : 24,
         }}
       >
-        {/* 🔵 ROUND BUTTON */}
         <div className="relative w-14 h-14 rounded-full bg-white/70 shadow-lg flex items-center justify-center hover:scale-110 transition">
 
-          {/* 🔥 PULSE EFFECT */}
           <span className="absolute inset-0 rounded-full bg-white opacity-20 animate-ping"></span>
 
-          {/* 🤖 LOTTIE / EMOJI */}
           <div className="w-10 h-10 z-10">
             <Lottie animationData={hiBot} loop />
           </div>
@@ -161,16 +173,25 @@ const ChatBot = ({ sendMessage }) => {
           <h2 className="font-semibold text-white">
             Sync AI ©
           </h2>
-          <button onClick={() => setIsOpen(false)} className="text-white">⨉</button>
+
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-white"
+          >
+            ⨉
+          </button>
         </div>
 
-        {/* MESSAGES */}
+        {/* ================= MESSAGES ================= */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
 
           {messages.map((m, i) => (
-            <div key={i} className={m.sender === "user" ? "text-right" : ""}>
+            <div
+              key={i}
+              className={m.sender === "user" ? "text-right" : ""}
+            >
 
-              {/* TEXT MESSAGE */}
+              {/* TEXT */}
               {m.type === "text" && (
                 <span
                   className={`inline-block px-4 py-2 rounded-xl text-sm max-w-[80%] ${
@@ -183,64 +204,89 @@ const ChatBot = ({ sendMessage }) => {
                 </span>
               )}
 
-              {/* FREELANCERS */}
+              {/* FREELANCER CARDS */}
               {m.type === "freelancers" && (
-                <div className="grid gap-3 mt-2">
+                <div className="grid gap-4 mt-2">
+
                   {m.freelancers.map((f) => (
-                    <Card
-                      key={f._id}
-                      className="bg-white/5 border border-white/10 backdrop-blur"
+                    <div
+                      key={f._id || f.id}
+                      className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 
+                      hover:scale-105 hover:shadow-2xl transition duration-300 flex flex-col justify-between"
                     >
-                      <CardContent className="pt-4">
-                        <h3 className="font-semibold text-white">
+
+                      {/* TOP */}
+                      <div>
+                        <h2 className="text-lg font-semibold text-white">
                           {f.name}
-                        </h3>
+                        </h2>
 
-                        <p className="text-sm text-gray-400">
-                          {f.category}
+                        <p className="text-gray-400 text-sm">
+                          {f.subcategory || f.category}
                         </p>
 
-                        <p className="text-sm text-gray-300">
-                          {f.city}
+                        <p className="text-gray-500 text-sm mt-1">
+                          📍 {f.location?.city || f.city} -
+                          {" "}
+                          {f.location?.pincode || f.pincode || "N/A"}
                         </p>
 
-                        <p className="text-xs text-gray-400">
-                          ⭐ {f.rating}
+                        <p className="text-yellow-400 text-sm mt-1">
+                          ⭐ {f.rating || 4.5}
+                        </p>
+                      </div>
+
+                      {/* BOTTOM */}
+                      <div className="mt-4 flex items-center justify-between">
+
+                        <p className="text-lg font-bold text-white">
+                          ₹{f.pricing?.amount || f.price}
                         </p>
 
-                        <Link to="/services">
-                          <Button size="sm" className="mt-3 w-full">
-                            View Profile
+                        <Link to={`/freelancer/${f._id || f.id}`}>
+                          <Button size="sm" className="text-white">
+                            View
                           </Button>
                         </Link>
-                      </CardContent>
-                    </Card>
+
+                      </div>
+                    </div>
                   ))}
+
                 </div>
               )}
             </div>
           ))}
 
           {isLoading && (
-            <p className="text-sm text-gray-400">🤖 Thinking...</p>
+            <p className="text-sm text-gray-400">
+              🤖 Thinking...
+            </p>
           )}
 
           <div ref={messagesEndRef} />
         </div>
 
-        {/* INPUT */}
+        {/* ================= INPUT ================= */}
         <div className="p-3 border-t border-white/10 flex gap-2">
+
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask something..."
             className="bg-white/5 border-white/10 text-white"
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) =>
+              e.key === "Enter" && handleSend()
+            }
           />
 
-          <Button onClick={handleSend} className="text-white">
+          <Button
+            onClick={handleSend}
+            className="text-white"
+          >
             Send
           </Button>
+
         </div>
       </div>
     </>

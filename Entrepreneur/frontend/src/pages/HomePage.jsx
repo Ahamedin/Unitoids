@@ -24,19 +24,33 @@ useEffect(() => {
   }
 }, [isSignedIn]);
   const sendMessage = async (message) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
+  try {
+    const res = await fetch("http://localhost:8000/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "Unitoids@2026",
+        "x-session-id": "default"
+      },
+      body: JSON.stringify({ message }),
+    });
 
-      return await res.json();
-    } catch (err) {
-      console.error("Chat API error:", err);
-      return { error: "Sorry, I could not process your message." };
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     }
-  };
+
+    const data = await res.json();
+
+    return {
+      general_answer: data.general_answer || data.freelancer_answer || data.support_answer || data.answer || data.reply || "No response received",
+    };
+
+  } catch (err) {
+    return {
+      general_answer: "❌ Sorry, server error",
+    };
+  }
+};
 
   return (
     <div className="min-h-screen relative overflow-hidden">
