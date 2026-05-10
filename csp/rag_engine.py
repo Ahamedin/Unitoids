@@ -6,40 +6,15 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.prompts import PromptTemplate
 
-# Load environment variables
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-# LLM
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    temperature=0.3,
-    google_api_key=GOOGLE_API_KEY
-)
-
-# Embeddings
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
-
-# Load FAISS vector store
+# Global variables
+llm = None
+embeddings = None
 db = None
 retriever = None
-
-def load_vectorstore():
-    global db, retriever
-
-    if db is None:
-        db = FAISS.load_local(
-            "vectorstore",
-            embeddings,
-            allow_dangerous_deserialization=True
-        )
-
-        retriever = db.as_retriever(search_kwargs={"k": 4})
-
-retriever = db.as_retriever(search_kwargs={"k": 4})
 
 # Prompt template
 prompt = PromptTemplate(
@@ -59,9 +34,39 @@ Answer clearly:
 """
 )
 
+def initialize():
+
+    global llm, embeddings, db, retriever
+
+    # Load only once
+    if llm is None:
+
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            temperature=0.3,
+            google_api_key=GOOGLE_API_KEY
+        )
+
+    if embeddings is None:
+
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+    if db is None:
+
+        db = FAISS.load_local(
+            "vectorstore",
+            embeddings,
+            allow_dangerous_deserialization=True
+        )
+
+        retriever = db.as_retriever(search_kwargs={"k": 4})
+
+
 def ask_question(query):
 
-    load_vectorstore()
+    initialize()
 
     docs = retriever.get_relevant_documents(query)
 
