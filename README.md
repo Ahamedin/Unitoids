@@ -1,20 +1,20 @@
-# 🚀 Unitoids – AI Powered Freelancing Platform
+#  Unitoids – AI Powered Freelancing Platform
 
 Unitoids is a modern AI-driven freelancing platform that connects **clients and freelancers** (both technical & non-technical) with smart recommendations, real-time chat assistance, and location-based discovery.
 
 ---
 
-## 🌟 Features
+## Features
 
-### 👨‍💻 Freelancing Marketplace
+### Freelancing Marketplace
 
 * Find freelancers based on **category, city, and skills**
 * Supports both:
 
-  * 🧠 **White-collar jobs** (Developers, Designers, etc.)
-  * 🔧 **Blue-collar jobs** (Electricians, Plumbers, etc.)
+  *  **White-collar jobs** (Developers, Designers, etc.)
+  *  **Blue-collar jobs** (Electricians, Plumbers, etc.)
 
-### 🤖 AI Chatbot (RAG Based)
+###  AI Chatbot (RAG Based)
 
 * Intelligent assistant for:
 
@@ -23,41 +23,41 @@ Unitoids is a modern AI-driven freelancing platform that connects **clients and 
   * General queries
 * Uses **FAISS vector database + embeddings**
 
-### 📍 Location-Based Search
+###  Location-Based Search
 
 * Fetch freelancers based on:
 
   * City
   * Pincode
 
-### 🔐 Authentication
+###  Authentication
 
 * Secure login/signup using **Clerk**
 * Role-based system (User / Freelancer)
 
-### 📦 Booking System
+###  Booking System
 
 * Book freelancers easily
 * Track project details & status
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
-### 🌐 Frontend
+###  Frontend
 
 * React (Vite)
 * Tailwind CSS
 * shadcn/ui
 * Clerk Authentication
 
-### ⚙️ Backend
+###  Backend
 
 * Node.js + Express
 * MongoDB
 * REST APIs
 
-### 🤖 AI Service (Python)
+###  AI Service (Python)
 
 * FastAPI
 * FAISS (Vector Search)
@@ -65,7 +65,7 @@ Unitoids is a modern AI-driven freelancing platform that connects **clients and 
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 FreeLancers-Website/
@@ -82,7 +82,7 @@ FreeLancers-Website/
 
 ---
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 ### 1️⃣ Clone Repository
 
@@ -126,7 +126,7 @@ python app.py
 
 ---
 
-## 🧠 Note on AI Files
+##  Note on AI Files
 
 Vector database files (`.faiss`, `.pkl`) are excluded from Git.
 
@@ -138,7 +138,7 @@ python create_vectorstore.py
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 <img width="1920" height="1080" alt="unitoids" src="https://github.com/user-attachments/assets/f97991cc-2580-43d7-9226-2e8dfdc0adb6" />
 <img width="1920" height="1080" alt="unitoids" src="https://github.com/user-attachments/assets/72e1d0e8-2f02-42a6-afc1-47763c78d76d" />
@@ -152,26 +152,26 @@ python create_vectorstore.py
 
 ---
 
-## 🚀 Future Improvements
+##  Future Improvements
 
-* 💳 Payment Integration
-* ⭐ Rating & Review System
-* 📱 Mobile Responsive Enhancements
-* 🔔 Notifications System
-* 🌍 Multi-language Support
+*  Payment Integration
+*  Rating & Review System
+*  Mobile Responsive Enhancements
+*  Notifications System
+*  Multi-language Support
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Iklash Ahamed**
 
-* 💼 Full Stack Developer
-* 🚀 Passionate about AI + Web + Startups
+*  Full Stack Developer
+*  Passionate about AI + Web + Startups
 
 ---
 
-## 📌 Conclusion
+##  Conclusion
 
 Unitoids is designed to bridge the gap between talent and opportunity using **AI-powered intelligence**, making freelancing smarter, faster, and more accessible.
 
