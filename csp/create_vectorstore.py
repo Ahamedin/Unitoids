@@ -2,7 +2,7 @@ import os
 import json
 from dotenv import load_dotenv
 
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
 # ===============================
@@ -27,9 +27,8 @@ with open("data/website_info.txt", "r", encoding="utf-8") as f:
 # CREATE EMBEDDINGS
 # ===============================
 
-embeddings = GoogleGenerativeAIEmbeddings(
-    model="text-embedding-004",
-    google_api_key=GOOGLE_API_KEY
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
 # ===============================

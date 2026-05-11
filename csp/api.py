@@ -6,11 +6,10 @@ from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 from fastapi.responses import JSONResponse
 
@@ -79,9 +78,8 @@ llm = ChatGoogleGenerativeAI(
 # Embeddings
 # ===============================
 
-embeddings_model = GoogleGenerativeAIEmbeddings(
-    model="text-embedding-004",
-    google_api_key=GOOGLE_API_KEY
+embeddings_model = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 # ===============================
 # Helper Functions
