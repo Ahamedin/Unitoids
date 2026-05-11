@@ -12,6 +12,8 @@ from langchain.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
+from fastapi.responses import JSONResponse
+
 
 # ===============================
 # Load ENV
@@ -344,6 +346,7 @@ class QueryRequest(BaseModel):
 # Chat Endpoint
 # ===============================
 
+
 @app.post("/chat")
 async def chat_endpoint(
     req: QueryRequest,
@@ -351,44 +354,81 @@ async def chat_endpoint(
     x_session_id: str = Header("default")
 ):
 
-    if x_api_key != API_KEY:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+    try:
 
-    query = req.message.strip()
+        # ===============================
+        # AUTH
+        # ===============================
 
-    chat_history = "\n".join(list(session_memory[x_session_id]))
+        if x_api_key != API_KEY:
+            raise HTTPException(
+                status_code=401,
+                detail="Unauthorized"
+            )
 
-    intent = classify_intent(query)
+        query = req.message.strip()
 
-    response = {}
+        if not query:
+            return JSONResponse(
+                status_code=400,
+                content={
+                    "error": "Empty message"
+                }
+            )
 
-    # ===============================
-    # FREELANCER SEARCH FIRST
-    # ===============================
+        # ===============================
+        # MEMORY
+        # ===============================
 
-    if intent == "FREELANCER_QUERY":
+        chat_history = "\n".join(
+            list(session_memory[x_session_id])
+        )
 
-        result = freelancer_qa_chain.invoke({"query": query})
+        # ===============================
+        # INTENT
+        # ===============================
 
-        response["freelancer_answer"] = result["result"]
+        intent = classify_intent(query)
 
-    # ===============================
-    # SUPPORT QUESTIONS
-    # ===============================
+        response = {}
 
-    elif intent == "SUPPORT_QUERY":
+        # ===============================
+        # FREELANCER SEARCH
+        # ===============================
 
-        result = support_qa_chain.invoke({"query": query})
+        if intent == "FREELANCER_QUERY":
 
-        response["support_answer"] = result["result"]
+            result = freelancer_qa_chain.invoke({
+                "query": query
+            })
 
-    # ===============================
-    # GENERAL CHAT
-    # ===============================
+            response["freelancer_answer"] = result.get(
+                "result",
+                "No freelancer results found"
+            )
 
-    else:
+        # ===============================
+        # SUPPORT
+        # ===============================
 
-        prompt = f"""
+        elif intent == "SUPPORT_QUERY":
+
+            result = support_qa_chain.invoke({
+                "query": query
+            })
+
+            response["support_answer"] = result.get(
+                "result",
+                "No support answer found"
+            )
+
+        # ===============================
+        # GENERAL CHAT
+        # ===============================
+
+        else:
+
+            prompt = f"""
 You are a friendly assistant.
 
 Conversation history:
@@ -398,16 +438,27 @@ User: {query}
 Assistant:
 """
 
-        reply = llm.invoke(prompt)
+            reply = llm.invoke(prompt)
 
-        response["general_answer"] = reply.content.strip()
+            response["general_answer"] = reply.content.strip()
 
-    # ===============================
-    # SAVE MEMORY
-    # ===============================
+        # ===============================
+        # SAVE MEMORY
+        # ===============================
 
-    session_memory[x_session_id].append(
-        f"User: {query}\nAI: {list(response.values())[0]}"
-    )
+        session_memory[x_session_id].append(
+            f"User: {query}\nAI: {list(response.values())[0]}"
+        )
 
-    return response
+        return response
+
+    except Exception as e:
+
+        print("❌ CHAT ERROR:", str(e))
+
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": str(e)
+            }
+        )
