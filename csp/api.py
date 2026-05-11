@@ -226,7 +226,7 @@ def classify_intent(query):
 
 
 # ===============================
-# Vector Stores
+# Vector Stores (LOAD ONLY)
 # ===============================
 
 print("🔧 Loading FAISS vector stores...")
@@ -234,69 +234,29 @@ print("🔧 Loading FAISS vector stores...")
 FAISS_FREELANCERS_PATH = "data/faiss_freelancers_index"
 FAISS_SUPPORT_PATH = "data/faiss_support_index"
 
-
-def should_rebuild_freelancer_index():
-    # Rebuild if index is missing or source JSON changed after index creation.
-    index_file = os.path.join(FAISS_FREELANCERS_PATH, "index.faiss")
-    source_file = "data/freelancers.json"
-
-    if not os.path.exists(index_file):
-        return True
-
-    if not os.path.exists(source_file):
-        return False
-
-    return os.path.getmtime(source_file) > os.path.getmtime(index_file)
-
 # Freelancer DB
-if os.path.exists(FAISS_FREELANCERS_PATH) and not should_rebuild_freelancer_index():
+freelancer_db = FAISS.load_local(
+    FAISS_FREELANCERS_PATH,
+    embeddings_model,
+    allow_dangerous_deserialization=True
+)
 
-    freelancer_db = FAISS.load_local(
-        FAISS_FREELANCERS_PATH,
-        embeddings_model,
-        allow_dangerous_deserialization=True
-    )
-
-else:
-
-    if os.path.exists(FAISS_FREELANCERS_PATH):
-        print("♻ Rebuilding freelancer FAISS index from updated freelancers.json")
-
-    freelancer_docs = create_documents(freelancers_data)
-
-    freelancer_db = FAISS.from_texts(
-        freelancer_docs,
-        embeddings_model
-    )
-
-    freelancer_db.save_local(FAISS_FREELANCERS_PATH)
-
-freelancer_retriever = freelancer_db.as_retriever(search_kwargs={"k": 5})
+freelancer_retriever = freelancer_db.as_retriever(
+    search_kwargs={"k": 5}
+)
 
 # Support DB
-if os.path.exists(FAISS_SUPPORT_PATH):
+support_db = FAISS.load_local(
+    FAISS_SUPPORT_PATH,
+    embeddings_model,
+    allow_dangerous_deserialization=True
+)
 
-    support_db = FAISS.load_local(
-        FAISS_SUPPORT_PATH,
-        embeddings_model,
-        allow_dangerous_deserialization=True
-    )
+support_retriever = support_db.as_retriever(
+    search_kwargs={"k": 3}
+)
 
-else:
-
-    support_docs = [
-        f"{title}: {text}" for title, text in sections_data.items()
-    ]
-
-    support_db = FAISS.from_texts(
-        support_docs,
-        embeddings_model
-    )
-
-    support_db.save_local(FAISS_SUPPORT_PATH)
-
-support_retriever = support_db.as_retriever(search_kwargs={"k": 3})
-
+print("✅ FAISS indexes loaded successfully")
 # ===============================
 # Prompt Templates
 # ===============================
