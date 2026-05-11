@@ -13,7 +13,7 @@ for f in freelancers:
 Name: {f['name']}
 Category: {f['category']}
 City: {f.get('city','N/A')}
-Price: {f['price']}
+Price: {f['pricing']['amount']}
 Rating: {f.get('averageRating',0)}
 Projects: {len(f.get('projects',[]))}
 """
