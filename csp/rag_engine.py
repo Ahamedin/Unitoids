@@ -48,11 +48,10 @@ def initialize():
         # embeddings = HuggingFaceEmbeddings(
         #     model_name="sentence-transformers/all-MiniLM-L6-v2"
         # )
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001",
-            google_api_key=GOOGLE_API_KEY
-        )
-
+        embeddings_model = GoogleGenerativeAIEmbeddings(
+    model="models/text-embedding-004",
+    google_api_key=GOOGLE_API_KEY
+)
     if db is None:
         db = FAISS.load_local(
             "vectorstore",
