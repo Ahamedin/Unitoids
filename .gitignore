@@ -6,8 +6,7 @@ venv/
 csp/venv/
 
 # AI / Vector DB
-*.faiss
-*.pkl
+
 csp/vectorstore/
 csp/data/faiss_*
 
