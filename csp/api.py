@@ -28,11 +28,6 @@ print("GEMINI KEY:", GOOGLE_API_KEY)
 # ===============================
 
 app = FastAPI(title="Freelancer Chatbot API")
-
-@app.get("/")
-def home():
-    return {"message": "API running"}
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # allow all (for development)
@@ -40,6 +35,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/")
+def home():
+    return {"message": "API running"}
+
+
 # ===============================
 # Load Data
 # ===============================
