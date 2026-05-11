@@ -6,7 +6,7 @@ from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain_core.prompts import PromptTemplate
@@ -18,10 +18,10 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
-GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 API_KEY = os.getenv("PYTHON_API_KEY", "Unitoids@2026")
 
-print("GEMINI KEY:", GEMINI_API_KEY)
+print("GEMINI KEY:", GOOGLE_API_KEY)
 # ===============================
 # FastAPI App
 # ===============================
@@ -69,15 +69,16 @@ for line in content.splitlines():
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     temperature=0.3,
-    google_api_key=GEMINI_API_KEY
+    google_api_key=GOOGLE_API_KEY
 )
 
 # ===============================
 # Embeddings
 # ===============================
 
-embeddings_model = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+embeddings_model = GoogleGenerativeAIEmbeddings(
+    model="models/embedding-001",
+    google_api_key=GOOGLE_API_KEY
 )
 
 # ===============================
