@@ -25,7 +25,7 @@ useEffect(() => {
 }, [isSignedIn]);
   const sendMessage = async (message) => {
   try {
-    const res = await fetch("https://unitoids-chatbot.onrender.com/chat", {
+    const res = await fetch("https://unitoids.onrender.com/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
