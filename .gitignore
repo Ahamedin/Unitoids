@@ -5,11 +5,6 @@ __pycache__/
 venv/
 csp/venv/
 
-# AI / Vector DB
-
-csp/vectorstore/
-csp/data/faiss_*
-
 # Environment variables
 .env
 
