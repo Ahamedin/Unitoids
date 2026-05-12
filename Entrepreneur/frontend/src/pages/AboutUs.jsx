@@ -62,7 +62,7 @@ function AboutUs() {
             {[
               { name: "Iklash Ahamed", role: "Founder & CEO", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Brian" },
               { name: "Vignesh", role: "Head of Operations", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ananya" },
-              { name: "Pranav", role: "Tech Lead", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit" },
+              { name: "Sahana", role: "Tech Lead", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit" },
             ].map((member, i) => (
               <Card
                 key={i}
