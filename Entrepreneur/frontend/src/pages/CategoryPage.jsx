@@ -20,53 +20,59 @@ export default function CategoryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-16 px-6">
+    <div className="min-h-screen relative overflow-hidden px-6 py-16 text-foreground">
 
-      {/* 🔥 Background */}
+      {/* 🔥 GRID BACKGROUND */}
       <div className="grid-background"></div>
 
-      {/* ================= HEADER ================= */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold gradient-title">
-          Choose a Category
-        </h1>
+      {/* 🔥 DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/90 -z-10"></div>
 
-        <p className="text-muted-foreground mt-4">
-          Explore services across technical and non-technical domains
-        </p>
-      </div>
+      <div className="relative z-10 max-w-6xl mx-auto">
 
-      {/* ================= GRID ================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {/* ================= HEADER ================= */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white">
+            Choose a Category
+          </h1>
 
-        {categories.map((cat, index) => (
-          <Card
-            key={cat._id}
-            onClick={() =>
-              navigate(`/freelancers/${encodeURIComponent(cat.name)}`)
-            }
-            className="cursor-pointer hover:border-primary transition-all hover:scale-[1.03]"
-          >
-            <CardContent className="pt-6 text-center">
+          <p className="text-gray-400 mt-4">
+            Explore services across technical and non-technical domains
+          </p>
+        </div>
 
-              {/* ICON */}
-              <div className="text-4xl mb-4">
-                {getCategoryIcon(cat.name)}
-              </div>
+        {/* ================= GRID ================= */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-              {/* NAME */}
-              <h2 className="text-lg font-semibold">
-                {cat.name}
-              </h2>
+          {categories.map((cat, index) => (
+            <Card
+              key={cat._id}
+              onClick={() =>
+                navigate(`/freelancers/${encodeURIComponent(cat.name)}`)
+              }
+              className="bg-white/5 border border-white/10 backdrop-blur cursor-pointer hover:border-primary hover:scale-[1.03] transition-all"
+            >
+              <CardContent className="pt-6 text-center">
 
-              {/* SMALL DESC */}
-              <p className="text-sm text-muted-foreground mt-2">
-                Explore professionals in this category
-              </p>
+                {/* ICON */}
+                <div className="text-4xl mb-4">
+                  {getCategoryIcon(cat.name)}
+                </div>
 
-            </CardContent>
-          </Card>
-        ))}
+                {/* NAME */}
+                <h2 className="text-lg font-semibold text-white">
+                  {cat.name}
+                </h2>
+
+                {/* SMALL DESC */}
+                <p className="text-sm text-gray-400 mt-2">
+                  Explore professionals in this category
+                </p>
+
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

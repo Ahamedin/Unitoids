@@ -112,18 +112,18 @@ export default function UserBookings() {
                 </div>
 
                 {/* DETAILS */}
-                <p className="text-sm text-gray-400">
+                {/* <p className="text-sm text-gray-400">
                   <span className="text-white font-medium">
                     Freelancer ID:
                   </span>{" "}
                   {b.freelancerId}
-                </p>
+                </p> */}
 
                 <p className="text-sm text-gray-400">
                   {b.projectDetails}
                 </p>
 
-                <p className="text-lg font-bold text-primary">
+                <p className="text-lg font-bold text-primary text-green-500">
                   ₹{b.advanceFee}
                 </p>
 
