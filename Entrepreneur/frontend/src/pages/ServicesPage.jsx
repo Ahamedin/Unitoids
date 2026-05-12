@@ -72,60 +72,37 @@ export default function NonTechnicalServices() {
     }
   };
 
-  const fetchCityAndPincode = async (lat, lng) => {
-    const API_KEY = "YOUR_GOOGLE_API_KEY";
-    try {
-      const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?lat=${lat}&lng=${lng}&key=${API_KEY}`
-      );
-      const data = await res.json();
+  // const fetchCityAndPincode = async (lat, lng) => {
+  //   const API_KEY = "YOUR_GOOGLE_API_KEY";
+  //   try {
+  //     const res = await fetch(
+  //       `https://maps.googleapis.com/maps/api/geocode/json?lat=${lat}&lng=${lng}&key=${API_KEY}`
+  //     );
+  //     const data = await res.json();
 
-      if (data.results.length > 0) {
-        const comps = data.results[0].address_components;
-        const cityComp = comps.find(c => c.types.includes("locality"));
-        const pinComp = comps.find(c => c.types.includes("postal_code"));
+  //     if (data.results.length > 0) {
+  //       const comps = data.results[0].address_components;
+  //       const cityComp = comps.find(c => c.types.includes("locality"));
+  //       const pinComp = comps.find(c => c.types.includes("postal_code"));
 
-        return {
-          city: cityComp?.long_name || "",
-          pincode: pinComp?.long_name || "",
-        };
-      }
-    } catch (err) {
-      // Error silently
-    }
-    return { city: "", pincode: "" };
-  };
+  //       return {
+  //         city: cityComp?.long_name || "",
+  //         pincode: pinComp?.long_name || "",
+  //       };
+  //     }
+  //   } catch (err) {
+  //     // Error silently
+  //   }
+  //   return { city: "", pincode: "" };
+  // };
 
   useEffect(() => {
-    fetchAllFreelancers();
+  fetchAllFreelancers();
 
-    const detectLocation = async () => {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async (pos) => {
-            const loc = await fetchCityAndPincode(
-              pos.coords.latitude,
-              pos.coords.longitude
-            );
+  // Manual location search only
+  setLocationDenied(true);
 
-            if (loc.city) {
-              setCity(loc.city);
-              setPincode(loc.pincode);
-            } else {
-              setLocationDenied(true);
-            }
-          },
-          () => {
-            setLocationDenied(true);
-          }
-        );
-      } else {
-        setLocationDenied(true);
-      }
-    };
-
-    detectLocation();
-  }, []);
+}, []);
 
   const handleSearch = () => {
     if (city) fetchFreelancersByLocation(city, pincode);
