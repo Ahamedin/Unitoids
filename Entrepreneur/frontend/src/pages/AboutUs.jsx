@@ -134,8 +134,8 @@ function AboutUs() {
 
         <div className="mt-8 flex justify-center gap-6 flex-wrap">
           {[
-            { name: "Hareesh", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" },
-            { name: "Karthick", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" },
+            { name: "Hareesh", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=John" },
+            { name: "Karthick", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael" },
             { name: "Arun", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma" },
           ].map((client) => (
             <div
