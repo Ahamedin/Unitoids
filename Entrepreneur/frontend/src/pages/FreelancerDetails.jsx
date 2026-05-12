@@ -224,6 +224,7 @@ useEffect(() => {
                 <Button
                   variant="destructive"
                   onClick={cancelBooking}
+                  className="text-red-700"
                 >
                   Cancel Booking
                 </Button>
