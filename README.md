@@ -2,6 +2,9 @@
 
 Unitoids is a modern AI-driven freelancing platform that connects **clients and freelancers** (both technical & non-technical) with smart recommendations, real-time chat assistance, and location-based discovery.
 
+![Deployment Status]
+[View Live Project](https://unitoids.vercel.app)
+
 ---
 
 ## Features
