@@ -137,6 +137,32 @@ python create_vectorstore.py
 ```
 
 ---
+## Environment Configuration
+
+Before running the application, create `.env` files in the respective directories.
+
+### AI Service (`csp/.env`)
+```env
+GOOGLE_API_KEY=your_google_api_key
+PYTHON_API_KEY=your_python_api_key
+```
+
+### Backend (`Entrepreneur/backend/.env`)
+```env
+MONGO_URI=your_mongodb_uri
+PYTHON_API_KEY=your_python_api_key
+PYTHON_API_URL=your_python_api_url
+JWT_SECRET=your_jwt_secret
+```
+
+### Frontend (`Entrepreneur/frontend/.env`)
+```env
+VITE_BACKEND_URL=your_backend_api_url
+VITE_CHATBOT_URL=your_python_api_url
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_key
+```
+
+---
 
 ##  Screenshots
 
