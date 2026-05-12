@@ -44,7 +44,7 @@ export default function ProfileSetup() {
     try {
       const normalizedCategory = normalizeCategory(category);
 
-      const res = await fetch("http://localhost:5000/api/freelancers", {
+      const res = await fetch("https://unitoids-backend.onrender.com/api/freelancers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -61,7 +61,7 @@ export default function ProfileSetup() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
 
-      await fetch("http://localhost:5000/api/categories", {
+      await fetch("https://unitoids-backend.onrender.com/api/categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: normalizedCategory }),

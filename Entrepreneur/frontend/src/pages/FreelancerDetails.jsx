@@ -21,7 +21,7 @@ useEffect(() => {
   const fetchFreelancer = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/freelancers/${id}`
+        `https://unitoids-backend.onrender.com/api/freelancers/${id}`
       );
       const data = await res.json();
 
@@ -68,7 +68,7 @@ useEffect(() => {
       return;
     }
 
-    const res = await fetch("http://localhost:5000/api/bookings", {
+    const res = await fetch("https://unitoids-backend.onrender.com/api/bookings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +91,7 @@ useEffect(() => {
   // ================= CANCEL =================
   const cancelBooking = async () => {
     await fetch(
-      `http://localhost:5000/api/bookings/${booking._id}/cancel`,
+      `https://unitoids-backend.onrender.com/api/bookings/${booking._id}/cancel`,
       { method: "PUT" }
     );
     setBooking(null);

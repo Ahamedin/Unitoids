@@ -16,7 +16,7 @@ export default function UserBookings() {
         const email = user.emailAddresses[0].emailAddress;
 
         const res = await fetch(
-          `http://localhost:5000/api/bookings/client/${email}`
+          `https://unitoids-backend.onrender.com/api/bookings/client/${email}`
         );
 
         const data = await res.json();
@@ -32,7 +32,7 @@ export default function UserBookings() {
   const handleRate = async (bookingId, ratingValue) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/bookings/${bookingId}/rate`,
+        `https://unitoids-backend.onrender.com/api/bookings/${bookingId}/rate`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

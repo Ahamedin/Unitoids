@@ -16,7 +16,7 @@ export default function NonTechnicalServices() {
     try {
       setLoading(true);
 
-      let url = `http://localhost:5000/api/freelancers/location?city=${encodeURIComponent(
+      let url = `https://unitoids-backend.onrender.com/api/freelancers/location?city=${encodeURIComponent(
         city
       )}`;
 

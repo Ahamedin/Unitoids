@@ -17,7 +17,7 @@ function FreelancerDashboard() {
       if (!user) return;
       try {
         const email = user.emailAddresses[0].emailAddress;
-        const res = await fetch(`http://localhost:5000/api/freelancers/by-email/${email}`);
+        const res = await fetch(`https://unitoids-backend.onrender.com/api/freelancers/by-email/${email}`);
         if (!res.ok) throw new Error("Failed to fetch freelancer");
         const data = await res.json();
         setFreelancer(data);
@@ -37,7 +37,7 @@ function FreelancerDashboard() {
       if (!freelancer?._id) return;
 
       const res = await fetch(
-        `http://localhost:5000/api/bookings/freelancer/${freelancer._id}`
+        `https://unitoids-backend.onrender.com/api/bookings/freelancer/${freelancer._id}`
       );
       const data = await res.json();
       setBookings(data);
@@ -50,7 +50,7 @@ function FreelancerDashboard() {
 const handleBookingAction = async (bookingId, action) => {
   try {
     const res = await fetch(
-      `http://localhost:5000/api/bookings/${bookingId}/${action}`,
+      `https://unitoids-backend.onrender.com/api/bookings/${bookingId}/${action}`,
       { method: "PUT" }
     );
     const updated = await res.json();
@@ -64,7 +64,7 @@ const handleBookingAction = async (bookingId, action) => {
     // ✅ Refresh freelancer data (for completed projects)
     if (freelancer?._id) {
       const refreshRes = await fetch(
-        `http://localhost:5000/api/freelancers/${freelancer._id}`
+        `https://unitoids-backend.onrender.com/api/freelancers/${freelancer._id}`
       );
       const freshData = await refreshRes.json();
       setFreelancer(freshData);

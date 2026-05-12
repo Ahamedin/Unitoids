@@ -11,7 +11,7 @@ export default function MyBookings({ userEmail }) {
     const fetchBookings = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/freelancers/user-bookings/${userEmail}`
+          `https://unitoids-backend.onrender.com/api/freelancers/user-bookings/${userEmail}`
         );
         const data = await res.json();
         setBookings(Array.isArray(data) ? data : []);

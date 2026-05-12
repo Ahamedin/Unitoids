@@ -40,7 +40,7 @@ export default function NonTechnicalServices() {
   const fetchAllFreelancers = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/freelancers");
+      const res = await fetch("https://unitoids-backend.onrender.com/api/freelancers");
       const data = await res.json();
       const freelancerList = normalizeFreelancerList(data);
 
@@ -56,7 +56,7 @@ export default function NonTechnicalServices() {
   const fetchFreelancersByLocation = async (userCity, userPincode) => {
     try {
       setLoading(true);
-      let url = `http://localhost:5000/api/freelancers/location?city=${encodeURIComponent(userCity)}`;
+      let url = `https://unitoids-backend.onrender.com/api/freelancers/location?city=${encodeURIComponent(userCity)}`;
       if (userPincode) url += `&pincode=${encodeURIComponent(userPincode)}`;
 
       const res = await fetch(url);

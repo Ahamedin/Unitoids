@@ -34,7 +34,7 @@ useEffect(() => {
   const fetchDBFreelancers = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/freelancers/category/${encodeURIComponent(categoryName)}`
+        `https://unitoids-backend.onrender.com/api/freelancers/category/${encodeURIComponent(categoryName)}`
       );
       const dbData = await res.json();
       const dbFreelancers = Array.isArray(dbData) ? dbData : [];
