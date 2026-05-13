@@ -12,7 +12,7 @@ function AboutUs() {
       <div className="absolute inset-0 bg-black/90 -z-10"></div>
 
       {/* ================= HERO ================= */}
-      <section className="relative z-10 text-center py-24 px-6">
+      <section className="relative z-10 text-center py-24 px-4 sm:px-6">
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
           About{" "}
           <span className="bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent">
@@ -27,7 +27,7 @@ function AboutUs() {
       </section>
 
       {/* ================= STORY ================= */}
-      <section className="relative z-10 py-20 px-6">
+      <section className="relative z-10 py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white">Our Story</h2>
 
@@ -40,7 +40,7 @@ function AboutUs() {
       </section>
 
       {/* ================= MISSION ================= */}
-      <section className="relative z-10 py-20 px-6 bg-white/5 backdrop-blur">
+      <section className="relative z-10 py-20 px-4 sm:px-6 bg-white/5 backdrop-blur">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white">Our Mission</h2>
 
@@ -52,7 +52,7 @@ function AboutUs() {
       </section>
 
       {/* ================= TEAM ================= */}
-      <section className="relative z-10 py-20 px-6">
+      <section className="relative z-10 py-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-10">
             Meet the Team
@@ -89,7 +89,7 @@ function AboutUs() {
       </section>
 
       {/* ================= SKILLS ================= */}
-      <section className="relative z-10 py-20 px-6 bg-white/5 backdrop-blur">
+      <section className="relative z-10 py-20 px-4 sm:px-6 bg-white/5 backdrop-blur">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-10">
             Our Expertise
@@ -129,7 +129,7 @@ function AboutUs() {
       </section>
 
       {/* ================= CLIENTS ================= */}
-      <section className="relative z-10 py-20 px-6 text-center">
+      <section className="relative z-10 py-20 px-4 sm:px-6 text-center">
         <h2 className="text-3xl font-bold text-white">Trusted By</h2>
 
         <div className="mt-8 flex justify-center gap-6 flex-wrap">

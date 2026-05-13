@@ -38,7 +38,7 @@ export default function MyBookings({ userEmail }) {
   };
 
   return (
-    <div className="min-h-screen relative px-6 py-12">
+    <div className="min-h-screen relative px-4 sm:px-6 py-12">
 
       {/* 🔥 GRID BACKGROUND */}
       <div className="grid-background"></div>

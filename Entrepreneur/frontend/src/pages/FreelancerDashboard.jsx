@@ -99,7 +99,7 @@ const handleBookingAction = async (bookingId, action) => {
     ).toFixed(1);
 
   return (
-    <div className="min-h-screen relative overflow-hidden text-foreground px-6 py-10">
+    <div className="min-h-screen relative overflow-hidden text-foreground px-4 sm:px-6 py-10">
 
       {/* 🔥 BACKGROUND */}
       <div className="grid-background"></div>

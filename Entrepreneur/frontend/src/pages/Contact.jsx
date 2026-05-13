@@ -48,7 +48,7 @@ const sendEmail = (e) => {
       <div className="absolute inset-0 bg-black/90 -z-10"></div>
 
       {/* ================= HERO ================= */}
-      <section className="relative z-10 text-center py-24 px-6">
+      <section className="relative z-10 text-center py-24 px-4 sm:px-6">
         <h1 className="text-4xl md:text-6xl font-extrabold text-white">
           Get in{" "}
           <span className="bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent">
@@ -62,7 +62,7 @@ const sendEmail = (e) => {
       </section>
 
       {/* ================= CONTACT ================= */}
-      <section className="relative z-10 py-16 px-6">
+      <section className="relative z-10 py-16 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto grid gap-10 md:grid-cols-2">
 
           {/* 🔵 FORM */}

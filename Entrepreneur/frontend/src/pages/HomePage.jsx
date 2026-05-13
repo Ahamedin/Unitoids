@@ -62,7 +62,7 @@ useEffect(() => {
       <div className="absolute inset-0 bg-black/90 -z-10"></div>
 
       {/* ================= HERO ================= */}
-      <section className="relative z-10 flex flex-col items-center justify-center text-center py-32 px-6">
+      <section className="relative z-10 flex flex-col items-center justify-center text-center py-24 sm:py-32 px-4 sm:px-6">
 
         <div className="max-w-4xl mx-auto">
 
@@ -150,7 +150,7 @@ useEffect(() => {
         
       </section>
             {/* ================= JOB TYPES ================= */}
-      <section className="relative z-10 py-24 px-6">
+      <section className="relative z-10 py-20 sm:py-24 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto text-center">
 
           <h2 className="text-3xl md:text-5xl font-bold text-white">
@@ -194,7 +194,7 @@ useEffect(() => {
         
       </section>
             {/* ================= HOW IT WORKS ================= */}
-      <section className="relative z-10 py-24 px-6">
+      <section className="relative z-10 py-20 sm:py-24 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto text-center">
 
           <h2 className="text-3xl md:text-5xl font-bold text-white">
@@ -228,7 +228,7 @@ useEffect(() => {
         </div>
       </section>
       {/* ================= CTA ================= */}
-      <section className="relative z-10 py-24 px-6 bg-gradient-to-b from-black/[0.03] via-3% to-black/100 text-center">
+      <section className="relative z-10 py-20 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-black/[0.03] via-3% to-black/100 text-center">
 
         <h2 className="text-3xl md:text-5xl font-bold text-white">
           Start Your Freelance Journey Today
@@ -252,7 +252,7 @@ useEffect(() => {
           </Link>
         ) : (
           // ✅ TWO BUTTONS → CENTER WITH GAP
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <Link to="/services">
               <Button
                 size="lg"

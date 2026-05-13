@@ -112,7 +112,7 @@ useEffect(() => {
     );
 
   return (
-    <div className="min-h-screen relative overflow-hidden px-6 py-12 text-foreground">
+    <div className="min-h-screen relative overflow-hidden px-4 sm:px-6 py-12 text-foreground">
 
       {/* 🔥 BACKGROUND */}
       <div className="grid-background"></div>

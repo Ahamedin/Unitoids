@@ -27,7 +27,7 @@ export default function FreelancerProfile() {
   };
 
   return (
-    <div className="min-h-screen relative px-6 py-12">
+    <div className="min-h-screen relative px-4 sm:px-6 py-12">
 
       {/* 🔥 BACKGROUND */}
       <div className="grid-background"></div>

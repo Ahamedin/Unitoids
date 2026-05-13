@@ -12,7 +12,7 @@ function PrivacyPolicy() {
       <div className="absolute inset-0 bg-black/90 -z-10"></div>
 
       {/* ================= HERO ================= */}
-      <section className="text-center py-24 px-6 relative z-10">
+      <section className="text-center py-24 px-4 sm:px-6 relative z-10">
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
           Privacy Policy
         </h1>
@@ -23,7 +23,7 @@ function PrivacyPolicy() {
       </section>
 
       {/* ================= CONTENT ================= */}
-      <section className="py-16 px-6 relative z-10">
+      <section className="py-16 px-4 sm:px-6 relative z-10">
         <div className="max-w-4xl mx-auto space-y-6">
 
           {[

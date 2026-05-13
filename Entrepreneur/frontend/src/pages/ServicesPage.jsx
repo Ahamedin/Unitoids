@@ -123,7 +123,7 @@ export default function NonTechnicalServices() {
       <div className="absolute inset-0 bg-black/90 -z-10"></div>
 
       {/* ================= HERO ================= */}
-      <section className="relative z-10 text-center py-20 px-6">
+      <section className="relative z-10 text-center py-20 px-4 sm:px-6">
         <h1 className="text-4xl md:text-6xl font-extrabold text-white">
           Find{" "}
           <span className="bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent">
@@ -138,7 +138,7 @@ export default function NonTechnicalServices() {
 
       {/* ================= SEARCH ================= */}
       {locationDenied && (
-        <div className="relative z-10 max-w-xl mx-auto px-6 mb-10">
+        <div className="relative z-10 max-w-xl mx-auto px-4 sm:px-6 mb-10">
           <Card className="bg-white/5 border border-white/10 backdrop-blur">
             <CardContent className="pt-6 space-y-4">
               <Input
@@ -163,7 +163,7 @@ export default function NonTechnicalServices() {
 
       {/* ================= CATEGORY FILTER ================= */}
       {freelancers.length > 0 && categories.length > 0 && (
-        <div className="relative z-10 max-w-2xl mx-auto px-6 mb-8">
+        <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 mb-8">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => {
@@ -197,7 +197,7 @@ export default function NonTechnicalServices() {
       )}
 
       {/* ================= CARDS ================= */}
-      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-6 pb-16">
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4 sm:px-6 pb-16">
 
         {loading ? (
           <p className="text-center text-gray-400 col-span-3">

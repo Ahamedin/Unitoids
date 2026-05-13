@@ -33,7 +33,7 @@ useEffect(() => {
   return (
     <header className="sticky top-0 z-50 bg-black border-b border-gray-800">
       
-      <div className="max-w-7xl mx-auto px-6 h-[68px] flex justify-between items-center ">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[68px] flex justify-between items-center ">
 
         {/* 🔥 LOGO */}
         <Link to="/" className="flex items-center">
@@ -101,7 +101,7 @@ useEffect(() => {
 
       {/* ================= MOBILE MENU ================= */}
       {isOpen && (
-        <div className="md:hidden bg-black border-t border-gray-800 px-6 py-6 space-y-4 text-gray-300">
+        <div className="md:hidden bg-black border-t border-gray-800 px-4 sm:px-6 py-6 space-y-4 text-gray-300">
 
           {location.pathname !== "/" && (
             <Link onClick={() => setIsOpen(false)} to="/" className="block hover:text-white">
@@ -131,7 +131,7 @@ useEffect(() => {
 
 
           {!isSignedIn ? (
-            <Link to="/login" onClick={() => setIsOpen(false)}>
+            <Link to="/login" onClick={() => setIsOpen(false)} className="block mt-2">
               <Button className="w-full bg-white text-black">
                 Sign In
               </Button>

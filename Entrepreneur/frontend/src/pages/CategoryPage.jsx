@@ -20,7 +20,7 @@ export default function CategoryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden px-6 py-16 text-foreground">
+    <div className="min-h-screen relative overflow-hidden px-4 sm:px-6 py-16 text-foreground">
 
       {/* 🔥 GRID BACKGROUND */}
       <div className="grid-background"></div>

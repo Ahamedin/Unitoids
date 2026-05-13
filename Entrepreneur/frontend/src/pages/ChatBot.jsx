@@ -15,9 +15,19 @@ const ChatBot = ({ sendMessage }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [width, setWidth] = useState(380);
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [isResizingSidebar, setIsResizingSidebar] = useState(false);
 
   const messagesEndRef = useRef(null);
+
+  const clampWidth = (desired, currentViewportWidth = window.innerWidth) => {
+    const maxWidth = Math.min(600, currentViewportWidth - 16);
+    const minWidth = Math.min(320, maxWidth);
+    return Math.max(minWidth, Math.min(desired, maxWidth));
+  };
+
+  const isMobile = viewportWidth < 640;
+  const chatWidth = clampWidth(width, viewportWidth);
 
   // ================= SCROLL =================
   useEffect(() => {
@@ -123,12 +133,22 @@ const ChatBot = ({ sendMessage }) => {
   useEffect(() => {
     const stop = () => setIsResizingSidebar(false);
 
+    const onResize = () => {
+      const vw = window.innerWidth;
+      setViewportWidth(vw);
+      setWidth((prev) => clampWidth(prev, vw));
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", stop);
+    window.addEventListener("resize", onResize);
+
+    onResize();
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", stop);
+      window.removeEventListener("resize", onResize);
     };
   });
 
@@ -140,7 +160,7 @@ const ChatBot = ({ sendMessage }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 z-50 flex items-center justify-center cursor-pointer transition-all duration-300"
         style={{
-          right: isOpen ? width + 24 : 24,
+          right: isOpen ? Math.min(chatWidth + 16, viewportWidth - 72) : 16,
         }}
       >
         <div className="relative w-14 h-14 rounded-full bg-white/70 shadow-lg flex items-center justify-center hover:scale-110 transition">
@@ -160,11 +180,16 @@ const ChatBot = ({ sendMessage }) => {
         flex flex-col transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
-        style={{ width }}
+        style={{
+          width: chatWidth,
+          height: "calc(100dvh - 68px)",
+        }}
       >
         {/* RESIZE HANDLE */}
         <div
-          className="absolute left-0 w-2 h-full cursor-ew-resize"
+          className={`absolute left-0 w-2 h-full cursor-ew-resize ${
+            isMobile ? "hidden" : "block"
+          }`}
           onMouseDown={() => setIsResizingSidebar(true)}
         />
 
@@ -259,8 +284,8 @@ const ChatBot = ({ sendMessage }) => {
           ))}
 
           {isLoading && (
-            <p className="text-sm text-gray-400">
-              🤖 Thinking...
+            <p className="text-sm text-white">
+              © Thinking...
             </p>
           )}
 
@@ -268,13 +293,13 @@ const ChatBot = ({ sendMessage }) => {
         </div>
 
         {/* ================= INPUT ================= */}
-        <div className="p-3 border-t border-white/10 flex gap-2">
+        <div className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-white/10 flex gap-2 bg-black/90">
 
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask something..."
-            className="bg-white/5 border-white/10 text-white"
+            className="bg-white/5 border-white/10 text-white text-sm"
             onKeyDown={(e) =>
               e.key === "Enter" && handleSend()
             }

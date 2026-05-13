@@ -56,7 +56,7 @@ export default function UserBookings() {
   };
 
   return (
-    <div className="min-h-screen relative px-6 py-16">
+    <div className="min-h-screen relative px-4 sm:px-6 py-16">
 
       {/* 🔥 GRID */}
       <div className="grid-background"></div>
