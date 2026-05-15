@@ -79,8 +79,8 @@ function PrivacyPolicy() {
             {
               title: "8. Contact",
               content: [
-                "Email: support@unitoids.com",
-                "Phone: +91 98765 43210",
+                "Email: iklashriz@gmail.com",
+                "Phone: +91 86103 38487",
               ],
             },
           ].map((section, i) => (
